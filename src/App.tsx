@@ -2,22 +2,24 @@ import "./styles.css";
 import React, { useState, useEffect } from "react";
 
 export default function App() {
+  const controls = ["details", "assignee", "dueDate"];
+
   // Check to see if values already exist in session storage and set hooks
   const [details, setDetails] = useState<string>(
-    localStorage.getItem("details") ?? ""
+    localStorage.getItem(controls[0]) ?? ""
   );
   const [assignee, setAssignee] = useState<string>(
-    localStorage.getItem("assignee") ?? ""
+    localStorage.getItem(controls[1]) ?? ""
   );
   const [dueDate, setDueDate] = useState<string>(
-    localStorage.getItem("dueDate") ?? ""
+    localStorage.getItem(controls[2]) ?? ""
   );
 
   useEffect(() => {
     // On change of any value update local storage
-    localStorage.setItem("details", details);
-    localStorage.setItem("assignee", assignee);
-    localStorage.setItem("dueDate", dueDate);
+    localStorage.setItem(controls[0], details);
+    localStorage.setItem(controls[1], assignee);
+    localStorage.setItem(controls[2], dueDate);
   }, [details, assignee, dueDate]);
 
   const onSave = (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,9 +33,9 @@ export default function App() {
     }
 
     // Clear storage on form submit (Save)
-    localStorage.removeItem("details");
-    localStorage.removeItem("assignee");
-    localStorage.removeItem("dueDate");
+    controls.forEach(function (control) {
+      localStorage.removeItem(control);
+    });
 
     // Reload page to clear controls
     window.location.reload();
